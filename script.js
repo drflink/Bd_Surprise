@@ -56,7 +56,8 @@ for (let i = 0; i < (calm ? 0 : 16); i++) {
 
 /* --- Confetti / hearts / petals on a canvas --- */
 const cv = $('#fx'), cx = cv.getContext('2d'); let parts = [], run = false;
-function size(){ cv.width = innerWidth; cv.height = innerHeight; } // CSS pixels keep it light on phones size(); addEventListener('resize', size);
+function size(){ cv.width = innerWidth; cv.height = innerHeight; }
+size(); addEventListener('resize', size);
 function burst(n = 90, chars = null, fromTop = false) {
   if (calm) n = 12;
   for (let i = 0; i < n; i++) parts.push({
@@ -118,7 +119,7 @@ function nextTrack(){
   for (let k = 1; k <= TRACKS.length; k++) { const n = (cur + k) % TRACKS.length; if (!bad.has(n)) return play(n); }
 }
 audio.addEventListener('play', render); audio.addEventListener('pause', render);
-audio.addEventListener('ended', nextTrack);
+audio.addEventListener('ended', render); // a song just stops when it ends; she chooses the next one herself
 audio.addEventListener('error', () => { bad.add(cur); render(); toast('Add ' + TRACKS[cur].file + ' to play this song'); });
 panel.onclick = e => {
   const b = e.target.closest('button'); if (!b) return;
@@ -163,7 +164,12 @@ $('#cake').onclick = () => { if (candles.every(c => c.classList.contains('off'))
 $('#wishBtn').onclick = () => { if (candles.every(c => c.classList.contains('off'))) relight(); candles.forEach(c => c.classList.add('off')); checkAllOut(); };
 
 /* --- Flowers --- */
-$('#flowerBtn').onclick = () => { petals(); petals(); $('#bouquet').hidden = false; $('#bouquet').scrollIntoView({behavior:calm?'auto':'smooth',block:'center'}); };
+const bq = $('#bouquet'); document.body.appendChild(bq); // moved out of its panel so it can fill the whole screen
+$('#flowerBtn').onclick = () => {
+  bq.hidden = false; bq.classList.remove('go'); void bq.offsetWidth; bq.classList.add('go');   // restart the pop-up animation
+  petals(); petals(); burst(40, ['🌷','💗','🌸']);
+};
+bq.addEventListener('click', () => bq.hidden = true);   // tap anywhere to close
 
 /* --- Gallery + lightbox + missing-photo fallback --- */
 document.querySelectorAll('#gallery img').forEach((img, i) => {
@@ -175,12 +181,17 @@ document.querySelectorAll('#gallery img').forEach((img, i) => {
   if (img.complete && img.naturalWidth === 0) img.onerror();
 });
 const lb = $('#lightbox');
-$('#gallery').onclick = e => {
-  const f = e.target.closest('figure'); if (!f) return;
-  const img = f.querySelector('img'); if (img.classList.contains('missing')) return;
-  lb.querySelector('img').src = img.src; lb.querySelector('p').textContent = f.querySelector('figcaption').textContent; lb.hidden = false;
-};
-lb.onclick = () => lb.hidden = true;
+// Each photo gets its own tap handler (more reliable on iPhones than one shared handler)
+document.querySelectorAll('#gallery figure').forEach(f => {
+  f.addEventListener('click', () => {
+    const img = f.querySelector('img');
+    if (img.classList.contains('missing') || !img.getAttribute('src')) return toast('Add this photo to the images folder to see it here ♡');
+    lb.querySelector('img').src = img.currentSrc || img.src;
+    lb.querySelector('p').textContent = f.querySelector('figcaption').textContent;
+    lb.hidden = false;
+  });
+});
+lb.addEventListener('click', () => lb.hidden = true);
 addEventListener('keydown', e => e.key === 'Escape' && (lb.hidden = true));
 
 /* --- Letter typewriter --- */
@@ -206,10 +217,35 @@ REASONS.forEach(([ic, txt]) => {
   rs.appendChild(c);
 });
 
+/* --- Video that plays after the first hug (EDIT the file name / caption here) --- */
+const VIDEO_FILE = 'video/hug.mp4';
+const VIDEO_CAPTION = 'A little something for you ♡';
+const vid = document.createElement('div'); vid.id = 'vid'; vid.hidden = true;
+vid.innerHTML = `<button class="x" aria-label="Close video">✕</button><p>${VIDEO_CAPTION}</p><video controls playsinline preload="none"></video>`;
+document.body.appendChild(vid);
+const vEl = vid.querySelector('video'); let musicWasOn = false;
+function openVideo(){
+  musicWasOn = !audio.paused; audio.pause();            // pause the song while the video plays
+  if (!vEl.getAttribute('src')) vEl.src = VIDEO_FILE;
+  vid.hidden = false; vEl.currentTime = 0; vEl.play().catch(() => {}); // if the phone blocks autoplay, she taps play
+}
+function closeVideo(){ vEl.pause(); vid.hidden = true; if (musicWasOn) audio.play().catch(() => {}); }
+vid.querySelector('.x').onclick = closeVideo;
+vid.addEventListener('click', e => { if (e.target === vid) closeVideo(); });
+vEl.addEventListener('error', () => { closeVideo(); toast('Add ' + VIDEO_FILE + ' to play the video'); });
+addEventListener('keydown', e => e.key === 'Escape' && !vid.hidden && closeVideo());
+
 /* --- Hug --- */
+let videoShown = false;
 $('#hugBtn').onclick = () => {
   show($('#hugMsg'), HUGS[hugI++ % HUGS.length]);
   burst(80, ['❤️','💗','💋','♥']); petals();
+  if (!videoShown) {                                    // first hug only: video opens after a moment
+    videoShown = true;
+    const again = document.createElement('button'); again.className = 'btn'; again.textContent = 'Watch my video again 🎬';
+    again.onclick = openVideo; $('#hugMsg').after(again);
+    setTimeout(openVideo, 2200);
+  }
 };
 
 /* --- Scroll reveals --- */
