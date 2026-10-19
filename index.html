@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday mero bacchu mero cutuu mero bhuntu ♡</title>
+<!-- Fonts load online if available; fallbacks are used otherwise -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+<canvas id="fx"></canvas>
+<div id="photoflow" aria-hidden="true"></div>
+<div id="float"></div>
+
+<!-- 2. OPENING -->
+<section id="intro">
+  <button id="env" aria-label="Open envelope"><span class="flap"></span><span class="heart">♥</span></button>
+  <p class="script">Hello bubuuuuu I made something just for you ♡</p>
+  <button class="btn glow" id="openBtn">Open Your Surprise 💌</button>
+</section>
+
+<main id="main" hidden>
+<button id="music" class="music" aria-label="Toggle music">♪</button>
+
+<!-- 3 + 7. HERO & CAKE -->
+<section class="sec hero">
+  <h1 class="script big">Happy Birthday muno bhuntooo ♡</h1>
+  <p class="sub">Today is all about the most beautiful person in my world.</p>
+  <div class="cake" id="cake">
+    <div class="candles">
+      <span class="candle"><i class="flame"></i></span><span class="candle"><i class="flame"></i></span><span class="candle"><i class="flame"></i></span>
+    </div>
+    <div class="tier t1"></div><div class="tier t2"></div><div class="plate"></div>
+  </div>
+  <button class="btn" id="wishBtn">Make a Wish ✨</button>
+  <p class="msg" id="wishMsg"></p>
+  <small class="hint">(candle ma chuda pani huncha huss)</small>
+</section>
+
+<!-- 4. FLOWERS -->
+<section class="sec reveal">
+  <h2 class="script">If I could give you every flower in the world, I would still choose you.</h2>
+  <div class="garden">
+    <svg viewBox="0 0 60 120" class="fl"><path d="M30 60v60" stroke="#7a9a6a" stroke-width="3"/><g fill="#d6475f"><circle cx="30" cy="40" r="14"/><circle cx="30" cy="40" r="9" fill="#b92e48"/></g></svg>
+    <svg viewBox="0 0 60 120" class="fl"><path d="M30 55v65" stroke="#7a9a6a" stroke-width="3"/><path d="M12 30q18 40 36 0l-6-12-6 8-6-8-6 8z" fill="#f4a3b8"/></svg>
+    <svg viewBox="0 0 60 120" class="fl"><path d="M30 60v60" stroke="#7a9a6a" stroke-width="3"/><g fill="#fff"><circle cx="30" cy="28" r="8"/><circle cx="42" cy="40" r="8"/><circle cx="30" cy="52" r="8"/><circle cx="18" cy="40" r="8"/></g><circle cx="30" cy="40" r="6" fill="#f2c14e"/></svg>
+    <svg viewBox="0 0 60 120" class="fl"><path d="M30 60v60" stroke="#7a9a6a" stroke-width="3"/><g fill="#d6475f"><circle cx="30" cy="40" r="14"/><circle cx="30" cy="40" r="9" fill="#b92e48"/></g></svg>
+  </div>
+  <button class="btn" id="flowerBtn">Mero beautiful ko lagi ful 💐</button>
+  <div class="bouquet" id="bouquet" hidden><div class="bq">💐</div><p>A little bouquet for my favourite person. Wish I could give it to you in person.</p></div>
+</section>
+
+<!-- 5. GALLERY: edit captions here, swap photos in /images -->
+<section class="sec reveal">
+  <h2 class="script">Our Memories</h2>
+  <div class="gallery" id="gallery">
+    <figure><img src="images/photo1.jpg" alt="Memory 1"><figcaption>My favourite smile ♡</figcaption></figure>
+    <figure><img src="images/photo2.jpg" alt="Memory 2"><figcaption>One of my happiest memories.</figcaption></figure>
+    <figure><img src="images/photo3.jpg" alt="Memory 3"><figcaption>The girl who makes everything better.</figcaption></figure>
+    <figure><img src="images/photo4.jpg" alt="Memory 4"><figcaption>My favourite person, always.</figcaption></figure>
+    <figure><img src="images/photo5.jpg" alt="Memory 5"><figcaption>Love for you never fades ♡</figcaption></figure>
+    <figure><img src="images/photo6.jpg" alt="Memory 6"><figcaption>Elegant ♡</figcaption></figure>
+    <figure><img src="images/photo7.jpg" alt="Memory 7"><figcaption>Another favourite moment.</figcaption></figure>
+    <figure><img src="images/photo8.jpg" alt="Memory 8"><figcaption>Just us, being us ♡</figcaption></figure>
+    <figure><img src="images/photo9.jpg" alt="Memory 9"><figcaption>I'd relive this day forever.</figcaption></figure>
+    <figure><img src="images/photo10.jpg" alt="Memory 10"><figcaption>Cutieeee ♡♡</figcaption></figure>
+    <figure><img src="images/photo11.jpg" alt="Memory 11"><figcaption>This one always makes me smile.</figcaption></figure>
+    <figure><img src="images/photo12.jpg" alt="Memory 12"><figcaption>Here's to many more memories ♡</figcaption></figure>
+  </div>
+</section>
+<div id="lightbox" hidden><img alt=""><p></p></div>
+
+<!-- 6. LETTER -->
+<section class="sec reveal">
+  <h2 class="script">To my favourite human, ♡</h2>
+  <button class="btn" id="letterBtn">Mero jindagi ko first letter timro lagi 💌</button>
+  <div class="letter" id="letter" hidden><div id="letterText"></div></div>
+</section>
+
+<!-- 8. REASONS -->
+<section class="sec reveal">
+  <h2 class="script">Reasons Why I Love You</h2>
+  <p class="hint">Tap a card ♡</p>
+  <div class="reasons" id="reasons"></div>
+</section>
+
+<!-- 9. FINAL -->
+<section class="sec night">
+  <div class="moon"></div>
+  <p class="final">Out of all the people in this world, I'm superr duper bhagyamani that my heart found you. ♡</p>
+  <h2 class="script big">Happy Birthday Meroo mutuuuuu ❤️</h2>
+  <button class="btn" id="hugBtn">Hug? 🫂</button>
+  <p class="msg" id="hugMsg"></p>
+  <p class="sign">Made with all my love, just for you. ♡</p>
+</section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
